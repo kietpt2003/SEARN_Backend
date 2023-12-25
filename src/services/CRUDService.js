@@ -34,7 +34,19 @@ let hashUserPassword = async (password) => {
     })
 }
 
+let getAllUsers = () => {
+    return new Promise((resolve, reject) => {
+        try {
+            let users = db.User.findAll({ raw: true });
+            resolve(users);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 export {
     createNewUser,
-    hashUserPassword
+    hashUserPassword,
+    getAllUsers
 }
