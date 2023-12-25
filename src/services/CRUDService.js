@@ -90,10 +90,32 @@ let updateUserData = (user) => {
     })
 }
 
+let deleteUserById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: {
+                    id: userId
+                }
+            });
+            if (user) {
+                await user.destroy();
+                let allUsers = await getAllUsers();
+                resolve(allUsers);
+            } else {
+                resolve([]);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 export {
     createNewUser,
     hashUserPassword,
     getAllUsers,
     editUserById,
-    updateUserData
+    updateUserData,
+    deleteUserById
 }
