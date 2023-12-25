@@ -1,5 +1,5 @@
 import db from "../models/index";
-import { createNewUser, getAllUsers } from "../services/CRUDService";
+import { createNewUser, editUserById, getAllUsers, updateUserData } from "../services/CRUDService";
 
 let getHome = async (req, res) => {
     try {
@@ -35,10 +35,31 @@ let displayCRUD = async (req, res) => {
     });
 }
 
+let editCRUD = async (req, res) => {
+    let userId = req.query.id;
+    if (userId) {
+        let data = await editUserById(userId);
+        console.log('test: ', data);
+        return res.render('editCRUD.ejs', { user: data });
+    } else {
+        return res.send('User not found.');
+    }
+}
+
+let putCRUD = async (req, res) => {
+    let user = req.body;
+    let allUser = await updateUserData(user);
+    return res.render('displayCRUD.ejs', {
+        tableUsers: allUser
+    });
+}
+
 module.exports = {
     getHomePage: getHome,
     getAboutPage,
     getCRUD,
     postCRUD,
-    displayCRUD
+    displayCRUD,
+    editCRUD,
+    putCRUD
 }

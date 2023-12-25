@@ -23,10 +23,10 @@ let createNewUser = (data) => {
     })
 }
 
-let hashUserPassword = async (password) => {
-    return new Promise((resolve, reject) => {
+let hashUserPassword = (password) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            let hashPassword = bcrypt.hashSync(password, salt);
+            let hashPassword = await bcrypt.hashSync(password, salt);
             resolve(hashPassword);
         } catch (error) {
             reject(e);
@@ -35,10 +35,55 @@ let hashUserPassword = async (password) => {
 }
 
 let getAllUsers = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            let users = db.User.findAll({ raw: true });
+            let users = await db.User.findAll({ raw: true });
             resolve(users);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+let editUserById = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: {
+                    id: id
+                },
+                raw: true
+            });
+            if (user) {
+                resolve(user);
+            } else {
+                resolve([]);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+let updateUserData = (user) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log('check: ', user);
+            let data = await db.User.findOne({
+                where: {
+                    id: user.id
+                }
+            });
+            if (data) {
+                data.firstName = user.firstName;
+                data.lastName = user.lastName;
+                data.address = user.address;
+                await data.save();
+                let allUsers = await getAllUsers();
+                resolve(allUsers);
+            } else {
+                resolve([]);
+            }
         } catch (error) {
             reject(error);
         }
@@ -48,5 +93,7 @@ let getAllUsers = () => {
 export {
     createNewUser,
     hashUserPassword,
-    getAllUsers
+    getAllUsers,
+    editUserById,
+    updateUserData
 }
