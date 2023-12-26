@@ -11,8 +11,7 @@ import connectDB from "./config/connectDB";
 let app = express();
 
 app.use(cors({
-    credentials: true,
-    origin: true
+    credentials: true, //Nếu axios có config yêu cầu credential thì cái này phải true còn k config thì tru/false gì cũng dc
 }));
 
 //config app
