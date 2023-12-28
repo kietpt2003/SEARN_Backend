@@ -102,7 +102,7 @@ let createANewUser = (data) => {
             if (isExist) {
                 resolve({
                     errCode: 1,
-                    message: 'Your email is already in used, Plz try another email!'
+                    erMessage: 'Your email is already in used, Plz try another email!'
                 })
             } else {
                 let hashPasswordBCrypt = await hashUserPassword(data.password);
